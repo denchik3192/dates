@@ -1,7 +1,11 @@
-import React from 'react';
+import s from './title.module.scss';
 
 function Title() {
-  return <h1 style={{ color: '#42567A' }}>Исторические даты</h1>;
+  return (
+    <h1 className={s.title}>
+      Исторические<br></br>даты
+    </h1>
+  );
 }
 
 export default Title;

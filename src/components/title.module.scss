@@ -1,0 +1,12 @@
+.title{
+  font-size: 40px;
+  color: #42567A;
+  &::before{
+    content: '';
+    position: absolute;
+    left: 100px;
+    width: 5px;
+    height: 100px;
+    background: linear-gradient(#3877EE, #EF5DA8);
+  }
+}
