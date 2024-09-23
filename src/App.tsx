@@ -6,8 +6,9 @@ import 'swiper/scss';
 import 'swiper/scss/navigation';
 import 'swiper/scss/pagination';
 import DateEvent from './components/DateEvent';
-import { Navigation, Pagination, Scrollbar } from 'swiper/modules';
+import { Navigation, Pagination } from 'swiper/modules';
 import Container from './components/Container';
+import Circle from './components/Circle';
 
 function App() {
   return (
@@ -15,14 +16,13 @@ function App() {
       <Container>
         <Title />
         <Dates />
+        <Circle numDots={6} />
         <Swiper
+          style={{ marginTop: '100px' }}
           modules={[Navigation, Pagination]}
           spaceBetween={50}
           slidesPerView={3}
           navigation
-          pagination={{
-            type: 'fraction',
-          }}
           scrollbar={{ draggable: true }}
           onSwiper={(swiper: any) => console.log(swiper)}
           onSlideChange={() => console.log('slide change')}>

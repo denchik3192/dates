@@ -1,0 +1,50 @@
+.circle {
+    position: absolute;
+    margin: auto;
+    top: 215px;
+    left: calc(50% - 256px );
+    width: 530px;
+    height: 530px;
+    border-radius: 50%;
+    border: 1px solid grey;
+    transition: 0.7s ease-in;
+    z-index: 100;
+}
+
+.dot {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0;
+    background-color: grey;
+    border-radius: 50%;
+    transition: 0.3s ease-in;
+
+
+
+    &.active {
+        position: fixed;
+        bottom: 40px;
+        right: 40px;
+        font-size: 5px;
+        border: 1px solid grey;
+        transform: scale(5);
+        background-color: #ccc;
+        width: 56px;
+        height: 56px;
+        border: 1px solid grey;
+    }
+
+    &:hover {
+        position: absolute;
+        transform: scale(5);
+        background-color: #ccc;
+        border: 1px solid grey;
+        width: 56px;
+        height: 56px;
+        font-size: 5px;
+        transition: 0.2s ease-in-out;
+        cursor: pointer;
+    }
+}

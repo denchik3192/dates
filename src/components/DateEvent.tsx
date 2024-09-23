@@ -1,12 +1,14 @@
+import s from './date-event.module.scss';
+
 function DateEvent() {
   return (
     <>
-      <h4>2012</h4>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet eligendi at ratione
-        architecto laudantium dolores quae! Omnis porro voluptas saepe eum deserunt ipsum pariatur
-        quibusdam optio. Dolorum non eum tempore.
-      </p>
+      <div style={{ maxWidth: '400px' }}>
+        <h4 className={s.year}>2012</h4>
+        <p className={s.descr}>
+          13 сентября — частное солнечное затмение, видимое в Южной Африке и части Антарктиды
+        </p>
+      </div>
     </>
   );
 }
