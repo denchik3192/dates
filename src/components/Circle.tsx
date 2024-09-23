@@ -22,6 +22,8 @@ const Circle: React.FC<CircleProps> = ({ numDots }) => {
     const handleDotClick = (index: number) => {
       setActiveDot(index);
       const angle = (index / numDots) * 360 + 60;
+      console.log(angle);
+
       setRotation(-angle);
     };
 

@@ -1,17 +1,11 @@
+import s from './container.module.scss';
 interface IProps {
   children: React.ReactNode;
 }
 
 function Container({ children }: IProps) {
   return (
-    <div
-      style={{
-        margin: '0 auto',
-        maxWidth: '1440px',
-        height: '100vh',
-        background: '#ccc',
-        border: '1px solid grey',
-      }}>
+    <div className={s.wrapper}>
       <div style={{ padding: '100px' }}>{children}</div>
     </div>
   );
