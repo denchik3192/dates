@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import s from './circle.module.scss';
+import { db } from '../db/db';
 interface CircleProps {
   numDots: number;
 }
 
 const Circle: React.FC<CircleProps> = ({ numDots }) => {
-  const [activeDot, setActiveDot] = useState(0);
-  const [activeDotName, setActiveDotName] = useState('наука');
+  const [activeDot, setActiveDot] = useState(5);
+  const [activeDotName, setActiveDotName] = useState('Технологии');
 
   const dots: JSX.Element[] = [];
   const [rotation, setRotation] = useState(0);
@@ -21,7 +22,9 @@ const Circle: React.FC<CircleProps> = ({ numDots }) => {
 
     const handleDotClick = (index: number) => {
       setActiveDot(index);
-      const angle = (index / numDots) * 360 + 60;
+      setActiveDotName(db.categories[index].category);
+
+      const angle = (index / numDots) * 360;
       console.log(angle);
 
       setRotation(-angle);
@@ -48,7 +51,7 @@ const Circle: React.FC<CircleProps> = ({ numDots }) => {
       <div className={s.circle} style={{ transform: `rotate(${rotation}deg)` }}>
         {dots}
       </div>
-      <div>{activeDotName}</div>
+      <div className={s.category}>{activeDotName}</div>
     </>
   );
 };

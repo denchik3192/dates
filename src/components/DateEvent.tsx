@@ -1,13 +1,13 @@
 import s from './date-event.module.scss';
 
-function DateEvent() {
+function DateEvent({ event }: any) {
+  console.log(event);
+
   return (
     <>
-      <div style={{ maxWidth: '400px' }}>
-        <h4 className={s.year}>2012</h4>
-        <p className={s.descr}>
-          13 сентября — частное солнечное затмение, видимое в Южной Африке и части Антарктиды
-        </p>
+      <div className={s.event}>
+        <h4 className={s.year}>{event.date}</h4>
+        <p className={s.descr}>{event.description}</p>
       </div>
     </>
   );
