@@ -6,7 +6,7 @@ interface IProps {
 function Container({ children }: IProps) {
   return (
     <div className={s.wrapper}>
-      <div style={{ padding: '100px' }}>{children}</div>
+      <div className={s.container}>{children}</div>
     </div>
   );
 }

@@ -2,11 +2,11 @@
     position: absolute;
     margin: auto;
     top: 215px;
-    left: calc(50% - 256px );
+    left: calc(50% - 264px );
     width: 530px;
     height: 530px;
     border-radius: 50%;
-    border: 1px solid grey;
+    border: 1px solid #42567a2d;
     transition: 0.7s ease-in;
     z-index: 100;
 }
@@ -17,7 +17,7 @@
     align-items: center;
     justify-content: center;
     font-size: 0;
-    background-color: grey;
+    background-color: #42567A;
     border-radius: 50%;
     transition: 0.3s ease-in;
 
@@ -28,19 +28,18 @@
         bottom: 40px;
         right: 40px;
         font-size: 5px;
-        border: 1px solid grey;
+        border: 1px solid #42567a52;
         transform: scale(5);
         background-color: #ccc;
         width: 56px;
         height: 56px;
-        border: 1px solid grey;
     }
 
     &:hover {
         position: absolute;
         transform: scale(5);
         background-color: #ccc;
-        border: 1px solid grey;
+        border: 1px solid #42567a2d;
         width: 56px;
         height: 56px;
         font-size: 5px;
