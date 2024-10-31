@@ -49,6 +49,6 @@
 }
 .category{
     position: absolute;
-    left: 20px;
-    
+    left: calc(50% + 180px);
+    top:calc(50% - 240px);
 }

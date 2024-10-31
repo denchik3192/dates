@@ -8,19 +8,24 @@ import 'swiper/scss/pagination';
 import 'swiper/scss/effect-fade';
 
 import DateEvent from './components/DateEvent';
-import { Navigation, Pagination, EffectFade, EffectFlip } from 'swiper/modules';
+import { Navigation, Pagination, EffectFade } from 'swiper/modules';
 import Container from './components/Container';
 import Circle from './components/Circle';
 import { db } from './db/db';
+import { useState } from 'react';
 
 function App() {
+  const [activeDot, setActiveDot] = useState(0);
   const dots = db.categories.length;
   return (
     <>
       <Container>
         <Title />
         <Dates />
-        <Circle numDots={dots} />
+        <div style={{ marginBottom: '15px', color: '#42567A' }}>
+          0{activeDot + 1}/0{dots}
+        </div>
+        <Circle numDots={dots} activeDot={activeDot} setActiveDot={setActiveDot} />
         <div style={{ display: 'flex' }}>
           <div className="custom-prev-main"></div>
           <div className="custom-next-main"></div>
@@ -39,7 +44,7 @@ function App() {
           }}
           scrollbar={{ draggable: true }}
           onSwiper={(swiper: any) => console.log(swiper)}
-          onSlideChange={() => console.log('slide change')}>
+          onSlideChange={() => setActiveDot(activeDot + 1)}>
           {db.categories.map((el) => (
             <SwiperSlide>
               <div
@@ -47,7 +52,7 @@ function App() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  marginTop: '100px',
+                  marginTop: '20px',
                 }}>
                 <div className="custom-prev"></div>
                 <Swiper
@@ -60,7 +65,7 @@ function App() {
                   }}
                   scrollbar={{ draggable: true }}
                   onSwiper={(swiper: any) => console.log(swiper)}
-                  onSlideChange={() => console.log('slide change')}>
+                  onSlideChange={() => setActiveDot(activeDot + 1)}>
                   {el.events.map((event) => (
                     <SwiperSlide>
                       <DateEvent event={event} />

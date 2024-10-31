@@ -1,19 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import s from './circle.module.scss';
 import { db } from '../db/db';
+import { useSwiper } from 'swiper/react';
 interface CircleProps {
   numDots: number;
+  activeDot: number;
+  setActiveDot: (id: number) => void;
 }
 
-const Circle: React.FC<CircleProps> = ({ numDots }) => {
-  const [activeDot, setActiveDot] = useState(5);
+const Circle: React.FC<CircleProps> = ({ numDots, activeDot, setActiveDot }) => {
+  // const swiper = useSwiper();
   const [activeDotName, setActiveDotName] = useState('Технологии');
 
   const dots: JSX.Element[] = [];
   const [rotation, setRotation] = useState(0);
   const radius: number = 265;
   const dotRadius: number = 4;
-  console.log();
+  console.log(activeDot);
+  // useEffect(() => {}, [activeDot]);
 
   for (let i = 0; i < numDots; i++) {
     const angle: number = (i / numDots) * (2 * Math.PI); // angle in Rads
