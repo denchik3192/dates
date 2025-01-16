@@ -1,12 +1,18 @@
-import s from './container.module.scss';
+// import s from './container.module.scss';
+import styles from './container.module.scss';
 interface IProps {
   children: React.ReactNode;
 }
 
 function Container({ children }: IProps) {
   return (
-    <div className={s.wrapper}>
-      <div className={s.container}>{children}</div>
+    //   <div className={s.wrapper}>
+    //     <div className={s.container}>{children}</div>
+    //   </div>
+    <div className={styles.centralContainer}>
+      {children}
+      <div className={styles.verticalLine}></div>
+      <div className={styles.horizontalLine}></div>
     </div>
   );
 }
