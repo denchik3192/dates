@@ -5,6 +5,7 @@ interface IProps {
 }
 
 function Container({ children }: IProps) {
+  console.log('render Container');
   return (
     //   <div className={s.wrapper}>
     //     <div className={s.container}>{children}</div>

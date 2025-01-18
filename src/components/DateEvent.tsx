@@ -1,7 +1,7 @@
 import s from './date-event.module.scss';
 
 function DateEvent({ event }: any) {
-  console.log(event);
+  console.log('render dateEvent');
 
   return (
     <>

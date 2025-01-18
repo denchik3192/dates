@@ -51,7 +51,7 @@ export const db = {
             ]
         },
         {
-            category: "Технологии",
+            category: "Абы шо",
             events: [
                 { date: "1976", "description": "Основание компании Apple Стивом Джобсом" },
                 { date: "1981", "description": "Выпуск первого персонального компьютера IBM." },
