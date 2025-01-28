@@ -2,7 +2,7 @@
     position: absolute;
     margin: auto;
     top: 145px;
-    left: calc(50% - 264px );
+    left: calc(50% - 264px);
     width: 530px;
     height: 530px;
     border-radius: 50%;
@@ -31,9 +31,11 @@
         border: 1px solid #42567a52;
         transform: scale(5);
         background-color: #ccc;
+        // transform: rotate(0deg);
         width: 56px;
         height: 56px;
     }
+
 
     &:hover {
         position: absolute;
@@ -47,6 +49,7 @@
         cursor: pointer;
     }
 }
+
 // .category{
 //     color: #42567A;
 //     font-size: 1.2rem;
@@ -58,17 +61,18 @@
 .category {
     position: absolute;
     left: calc(50% + 150px);
-    top:calc(50% - 320px);
+    top: calc(50% - 320px);
     display: inline-block;
     overflow: hidden;
     color: #42567A;
     font-size: 1.2rem;
     font-weight: 600;
-   
+
     text-align: center;
-    height: 30px; // Высота контейнера под текст
-  }
-  .category span {
+    height: 30px;
+}
+
+.category span {
     display: inline-block;
-    white-space: pre; // Учитывает пробелы
-  }
+    white-space: pre;
+}

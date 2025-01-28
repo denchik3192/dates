@@ -126,6 +126,7 @@ function App() {
         <Title />
         <Dates activeDot={activeDot} />
         <div className="swiper-pagination"></div>
+        {/* <Circle numDots={dots} activeDot={activeDot} setActiveDot={setActiveDot} /> */}
         <Circle numDots={dots} activeDot={activeDot} setActiveDot={setActiveDot} />
         <div style={{ display: 'flex' }}>
           <div className="custom-prev-main"></div>
