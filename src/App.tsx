@@ -113,7 +113,7 @@ import { db } from "./db/db";
 import { useState } from "react";
 
 function App() {
-  const [activeDot, setActiveDot] = useState(1);
+  const [activeDot, setActiveDot] = useState(5);
 
   const renderCustom = (swiper: any, current: number, total: number) => {
     return `0${current}/0${total}`;
@@ -126,12 +126,7 @@ function App() {
         <Title />
         <Dates activeDot={activeDot} />
         <div className="swiper-pagination"></div>
-        {/* <Circle numDots={dots} activeDot={activeDot} setActiveDot={setActiveDot} /> */}
-        <Circle
-        // numDots={dots}
-        // activeDot={activeDot}
-        // setActiveDot={setActiveDot}
-        />
+        <Circle activeDot={activeDot} setActiveDot={setActiveDot} />
         <div style={{ display: "flex" }}>
           <div className="custom-prev-main"></div>
           <div className="custom-next-main"></div>

@@ -119,24 +119,28 @@
 ("use client");
 import React, { useRef, useState, useEffect } from "react";
 import { gsap } from "gsap";
-import s from "./circle.module.scss";
+import { db } from "../db/db";
 
 interface CircleProps {
   dotCount?: number;
   radius?: number;
   dotSize?: number;
-  fixedAngle?: number; // degrees where chosen dot should land (0 = right, 90 = down). 45 = top-right
+  fixedAngle?: number;
   activeScale?: number;
   hoverScale?: number;
   activeColor?: string;
   idleColor?: string;
+  activeDot: number;
+  setActiveDot: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const Circle: React.FC<CircleProps> = ({
+  setActiveDot,
+  activeDot,
   dotCount = 6,
   radius = 265,
   dotSize = 8,
-  fixedAngle = 45,
+  fixedAngle = 90,
   activeScale = 5.8,
   hoverScale = 5.35,
   activeColor = "#ccc",
@@ -147,13 +151,21 @@ const Circle: React.FC<CircleProps> = ({
   const labelInnerRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const labelRotorRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const rotation = useRef({ angle: 0 });
-
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+  const [categoryText, setCategoryText] = useState<string>(
+    db.categories[activeDot as number].category
+  );
+  const categoryTextRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (circleRef.current) {
       gsap.set(circleRef.current, { transformOrigin: "50% 50%" });
+    }
+
+    if (activeDot !== null) {
+      setDotVisual(activeDot, activeScale, activeColor, 0);
+      showLabel(activeDot);
+      rotateToIndex(activeDot, true);
     }
   }, []);
 
@@ -173,7 +185,7 @@ const Circle: React.FC<CircleProps> = ({
     const lab = labelInnerRefs.current[i];
     if (!lab) return;
     gsap.killTweensOf(lab);
-    gsap.to(lab, { opacity: 1, scale: 1, duration: 0.16, ease: "power1.out" });
+    gsap.to(lab, { opacity: 1, scale: 1, duration: 0.2, ease: "power1.out" });
   };
   const hideLabel = (i: number) => {
     const lab = labelInnerRefs.current[i];
@@ -184,31 +196,31 @@ const Circle: React.FC<CircleProps> = ({
 
   const handleHoverIn = (i: number) => {
     setHoverIndex(i);
-    if (activeIndex === i) return;
+    if (activeDot === i) return;
     setDotVisual(i, hoverScale, activeColor, 0.2);
     showLabel(i);
   };
 
   const handleHoverOut = (i: number) => {
     setHoverIndex(null);
-    if (activeIndex === i) return;
+    if (activeDot === i) return;
     setDotVisual(i, 1, idleColor, 0.2);
     hideLabel(i);
   };
 
-  const rotateToIndex = (i: number) => {
+  const rotateToIndex = (i: number, instant = false) => {
     const angleStep = 360 / dotCount;
-    const target = -(i * angleStep);
+    const target = -(i * angleStep) - 60;
+
     gsap.killTweensOf(rotation.current);
     gsap.to(rotation.current, {
       angle: target,
-      duration: 0.9,
-      ease: "power3.inOut",
+      duration: instant ? 0 : 1.5,
+      ease: instant ? "none" : "elastic.out(0.7, 0.9)",
       onUpdate: () => {
         const a = rotation.current.angle;
         if (circleRef.current)
           circleRef.current.style.transform = `rotate(${a}deg)`;
-        // counter-rotate label rotators so numbers stay upright
         labelRotorRefs.current.forEach((r) => {
           if (r) r.style.transform = `rotate(${-a}deg)`;
         });
@@ -217,106 +229,110 @@ const Circle: React.FC<CircleProps> = ({
   };
 
   const handleClick = (i: number) => {
-    if (activeIndex !== null && activeIndex !== i) {
-      // уменьшить предыдущую
-      setDotVisual(activeIndex, 1, idleColor, 0.2);
-      hideLabel(activeIndex);
+    if (activeDot !== null && activeDot !== i) {
+      setDotVisual(activeDot, 1, idleColor, 0.2);
+      hideLabel(activeDot);
     }
 
-    // активировать новую
-    setActiveIndex(i);
+    setActiveDot(i);
     setDotVisual(i, activeScale, activeColor, 0.28);
     showLabel(i);
 
     rotateToIndex(i);
+    setCategoryText(db.categories[activeDot].category);
   };
 
   return (
-    // <div
-    //   style={{
-    //     width: "100%",
-    //     height: "100vh",
-    //     display: "flex",
-    //     alignItems: "center",
-    //     justifyContent: "center",
-    //     background: "#222",
-    //   }}
-    // >
-    <div
-      ref={circleRef}
-      style={{
-        position: "absolute",
-        top: "145px",
-        left: "calc(50% - 264px)",
-        width: radius * 2,
-        height: radius * 2,
-        borderRadius: "50%",
-        border: "1px solid #42567a2d",
-        transformOrigin: "50% 50%",
-        zIndex: "150",
-      }}
-    >
-      {Array.from({ length: dotCount }).map((_, i) => {
-        const angle = (i * 2 * Math.PI) / dotCount;
-        const left = radius + radius * Math.cos(angle) - dotSize / 2;
-        const top = radius + radius * Math.sin(angle) - dotSize / 2;
+    <>
+      <div
+        ref={categoryTextRef}
+        style={{
+          position: "absolute",
+          right: "500px",
+          top: "120px",
+          display: "inline-block",
+          overflow: "hidden",
+          color: "#42567A",
+          fontSize: "1.2rem",
+          fontWeight: "600",
+          textAlign: "center",
+          height: "30px",
+        }}
+      >
+        <div>{categoryText}</div>
+      </div>
+      <div
+        ref={circleRef}
+        style={{
+          position: "absolute",
+          top: "145px",
+          left: "calc(50% - 264px)",
+          width: radius * 2,
+          height: radius * 2,
+          borderRadius: "50%",
+          border: "1px solid #42567a2d",
+          transformOrigin: "50% 50%",
+          zIndex: "150",
+        }}
+      >
+        {Array.from({ length: dotCount }).map((_, i) => {
+          const angle = (i * 2 * Math.PI) / dotCount;
+          const left = radius + radius * Math.cos(angle) - dotSize / 2;
+          const top = radius + radius * Math.sin(angle) - dotSize / 2;
 
-        return (
-          <div
-            key={i}
-            ref={(el) => (dotRefs.current[i] = el)}
-            onMouseEnter={() => handleHoverIn(i)}
-            onMouseLeave={() => handleHoverOut(i)}
-            onClick={() => handleClick(i)}
-            style={{
-              position: "absolute",
-              left: `${left}px`,
-              top: `${top}px`,
-              width: `${dotSize}px`,
-              height: `${dotSize}px`,
-              borderRadius: "50%",
-              background: idleColor,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              transform: "scale(1)",
-              userSelect: "none",
-            }}
-          >
-            {/* rotor — принимает counter-rotation so number stays upright */}
-            <span
-              ref={(el) => (labelRotorRefs.current[i] = el)}
+          return (
+            <div
+              key={i}
+              ref={(el) => (dotRefs.current[i] = el)}
+              onMouseEnter={() => handleHoverIn(i)}
+              onMouseLeave={() => handleHoverOut(i)}
+              onClick={() => handleClick(i)}
               style={{
-                display: "inline-block",
-                transformOrigin: "50% 50%",
-                pointerEvents: "none",
+                position: "absolute",
+                left: `${left}px`,
+                top: `${top}px`,
+                width: `${dotSize}px`,
+                height: `${dotSize}px`,
+                borderRadius: "50%",
+                background: idleColor,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                transform: "scale(1)",
+                userSelect: "none",
               }}
             >
-              {/* inner label — GSAP animates scale/opacity */}
               <span
-                ref={(el) => (labelInnerRefs.current[i] = el)}
+                ref={(el) => (labelRotorRefs.current[i] = el)}
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: Math.round(dotSize * 0.55),
-                  fontWeight: 700,
-                  lineHeight: 1,
-                  opacity: 0,
-                  // transform: "scale(0.6)",
+                  display: "inline-block",
+                  transformOrigin: "50% 50%",
                   pointerEvents: "none",
-                  color: "#000",
                 }}
               >
-                {i + 1}
+                <span
+                  ref={(el) => (labelInnerRefs.current[i] = el)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: Math.round(dotSize * 0.55),
+                    fontWeight: 700,
+                    lineHeight: 1,
+                    opacity: 0,
+                    pointerEvents: "none",
+                    color: "#000",
+                  }}
+                >
+                  {i + 1}
+                </span>
               </span>
-            </span>
-          </div>
-        );
-      })}
-    </div>
-    // </div>
+            </div>
+          );
+        })}
+      </div>
+    </>
   );
 };
 
