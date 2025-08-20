@@ -1,25 +1,61 @@
+// .dates {
+//   position: relative;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   gap: 100px;
+//   margin-top: 40px;
+//   margin-bottom: 70px;
+//   font-size: 200px;
+//   font-size: 12em;
+//   @media (max-width: 480px) {
+//     font-size: 6em;
+//   }
+// }
 .dates {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 100px;
-    margin-top: 40px;
-    margin-bottom: 70px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 100px;
+  margin-top: 40px;
+  margin-bottom: 70px;
+  font-size: 12em; // для больших экранов
 
-    // &::before {
-    //     position: absolute;
-    //     content: '';
-    //     width: 1px;
-    //     height: 90vh;
-    //     border-left: 1px solid rgba(128, 128, 128, 0.50);
-    //     z-index: 100;
-    // }
-    // &::after {
-    //     position: absolute;
-    //     content: '';
-    //     width: 1440px;
-    //     height: 1px;
-    //     border-bottom: 1px solid rgba(128, 128, 128, 0.50);
-    // }
+  .date,
+  & > div {
+    // если у тебя внутри ещё div для отдельных дат
+    display: flex;
+    color: inherit;
+    font-weight: 800;
+    text-align: center;
+
+    > div {
+      // отдельные цифры
+      display: inline-block;
+      width: 1ch;
+      text-align: center;
+      position: relative;
+    }
+  }
+
+  @media (max-width: 480px) {
+    // flex-direction: column;
+    gap: 20px;
+    font-size: 6em; // уменьшаем размер цифр
+
+    .date {
+      flex-direction: row;
+      gap: 0.1em; // чуть сжимаем цифры между собой
+    }
+  }
+
+  @media (max-width: 320px) {
+    font-size: 4em; // для самых маленьких экранов
+    gap: 10px;
+
+    .date {
+      gap: 0.05em;
+    }
+  }
 }

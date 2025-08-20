@@ -6,17 +6,20 @@
   padding-left: 70px;
   font-weight: 700;
   font-size: 56px;
-  color: #42567A;
+  color: #42567a;
   line-height: 120%;
-  
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     left: 0;
     width: 5px;
     height: 8rem;
-    background: linear-gradient(#3877EE, #EF5DA8);
+    background: linear-gradient(#3877ee, #ef5da8);
+  }
+  @media (max-width: 480px) {
+    font-size: 56px;
+    padding-left: 20px;
   }
 }

@@ -96,11 +96,10 @@ const Dates = ({ activeDot }: IProps) => {
 
   return (
     <div className={s.dates}>
-      {/* Первая дата */}
       <div
         style={{
           display: "flex",
-          fontSize: "200px",
+          // fontSize: "200px",
           color: "#5D5FEF",
           fontWeight: "800",
         }}
@@ -121,9 +120,9 @@ const Dates = ({ activeDot }: IProps) => {
         ))}
       </div>
       <div
+        className={s.date}
         style={{
           display: "flex",
-          fontSize: "200px",
           color: "#EF5DA8",
           fontWeight: "800",
         }}
