@@ -1,122 +1,3 @@
-// import audiofile from "../audio/zvuk11.wav";
-// import { useEffect, useRef, useState } from "react";
-// import s from "./circle.module.scss";
-// import { db } from "../db/db";
-// import { gsap } from "gsap";
-// import { TextPlugin } from "gsap/TextPlugin";
-// import { useSwiper } from "swiper/react";
-// import React from "react";
-
-// gsap.registerPlugin(TextPlugin);
-
-// interface CircleProps {
-//   numDots: number;
-//   activeDot: number;
-//   setActiveDot: (id: number) => void;
-// }
-
-// const Circle: React.FC<CircleProps> = ({
-//   numDots,
-//   activeDot,
-//   setActiveDot,
-// }) => {
-//   const swiper = useSwiper();
-//   const sound = new Audio(audiofile);
-
-//   const [rotation, setRotation] = useState(0); // Текущая ротация круга
-//   const radius: number = 265; // Радиус круга
-//   const dotRadius: number = 4; // Радиус точки
-//   const categoryRef = useRef<HTMLDivElement>(null);
-
-//   const dots: JSX.Element[] = [];
-
-//   const anglePerDot = 360 / numDots; // Угол между соседними точками
-//   const targetAngle = 120; // Угол, где должна быть активная точка
-
-//   const animateText = (newText: string) => {
-//     if (categoryRef.current) {
-//       const splitText = newText
-//         .split("")
-//         .map((char) => `<span>${char}</span>`)
-//         .join("");
-//       categoryRef.current.innerHTML = splitText;
-
-//       gsap.fromTo(
-//         categoryRef.current.children,
-//         { y: -50, opacity: 0 },
-//         { y: 0, opacity: 1, stagger: 0.05, duration: 0.5, ease: "power2.out" }
-//       );
-//     }
-//   };
-
-//   const handleDotClick = (index: number) => {
-//     sound.play();
-
-//     const currentAngle = activeDot * anglePerDot;
-//     const targetRotation = index * anglePerDot;
-//     const rotationDelta =
-//       targetRotation >= currentAngle
-//         ? targetRotation - currentAngle
-//         : 360 - currentAngle + targetRotation;
-
-//     const newRotation = rotation - rotationDelta;
-
-//     setActiveDot(index);
-//     setRotation(newRotation);
-
-//     gsap.to(`.${s.circle}`, {
-//       rotation: newRotation - targetAngle,
-//       duration: 0.1,
-//       ease: "power2.out",
-//     });
-
-//     const newCategory = db.categories[index].category;
-//     animateText(newCategory);
-//   };
-
-//   for (let i = 0; i < numDots; i++) {
-//     const angle: number = (i / numDots) * (2 * Math.PI); // Угол в радианах
-//     const x: number = radius + radius * Math.cos(angle);
-//     const y: number = radius + radius * Math.sin(angle);
-
-//     dots.push(
-//       <div
-//         key={i}
-//         className={`${s.dot} ${activeDot === i ? s.active : ""}`}
-//         onClick={() => handleDotClick(i)}
-//         style={{
-//           width: dotRadius * 2,
-//           height: dotRadius * 2,
-//           left: `${x - dotRadius}px`,
-//           top: `${y - dotRadius}px`,
-//         }}
-//       >
-//         {i}
-//       </div>
-//     );
-//   }
-
-//   useEffect(() => {
-//     if (db.categories[activeDot]) {
-//       animateText(db.categories[activeDot].category);
-//     }
-//   }, [activeDot]);
-
-//   return (
-//     <>
-//       <div
-//         className={s.circle}
-//         style={{ transform: `rotate(${rotation - targetAngle}deg)` }}
-//       >
-//         {dots}
-//       </div>
-//       <div ref={categoryRef} className={s.category}></div>
-//     </>
-//   );
-// };
-
-// export default Circle;
-("use client");
 import React, { useRef, useState, useEffect } from "react";
 import { gsap } from "gsap";
 import { db } from "../db/db";
@@ -131,7 +12,7 @@ interface CircleProps {
   activeColor?: string;
   idleColor?: string;
   activeDot: number;
-  setActiveDot: React.Dispatch<React.SetStateAction<number>>;
+  setActiveDot: (i: number) => void;
 }
 
 const Circle: React.FC<CircleProps> = ({
@@ -152,22 +33,38 @@ const Circle: React.FC<CircleProps> = ({
   const labelRotorRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const rotation = useRef({ angle: 0 });
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-  const [categoryText, setCategoryText] = useState<string>(
-    db.categories[activeDot as number].category
-  );
-  const categoryTextRef = useRef<HTMLDivElement>(null);
+  const category = db.categories[activeDot as number].category;
 
   useEffect(() => {
     if (circleRef.current) {
       gsap.set(circleRef.current, { transformOrigin: "50% 50%" });
     }
-
-    if (activeDot !== null) {
-      setDotVisual(activeDot, activeScale, activeColor, 0);
-      showLabel(activeDot);
-      rotateToIndex(activeDot, true);
-    }
   }, []);
+
+  /** Следим за activeDot и крутим круг */
+  useEffect(() => {
+    if (activeDot !== null) {
+      // сбрасываем прошлый активный
+      dotRefs.current.forEach((dot, i) => {
+        if (i !== activeDot && dot) {
+          gsap.to(dot, {
+            scale: 1,
+            backgroundColor: idleColor,
+            duration: 0.2,
+            ease: "power2.out",
+          });
+          hideLabel(i);
+        }
+      });
+
+      // подсвечиваем новый
+      setDotVisual(activeDot, activeScale, activeColor, 0.28);
+      showLabel(activeDot);
+
+      // вращаем к нему
+      rotateToIndex(activeDot);
+    }
+  }, [activeDot]);
 
   const setDotVisual = (i: number, scale: number, color: string, dur = 0.2) => {
     const el = dotRefs.current[i];
@@ -185,8 +82,9 @@ const Circle: React.FC<CircleProps> = ({
     const lab = labelInnerRefs.current[i];
     if (!lab) return;
     gsap.killTweensOf(lab);
-    gsap.to(lab, { opacity: 1, scale: 1, duration: 0.2, ease: "power1.out" });
+    gsap.to(lab, { opacity: 1, scale: 1, duration: 0.2, ease: "bounce.out" });
   };
+
   const hideLabel = (i: number) => {
     const lab = labelInnerRefs.current[i];
     if (!lab) return;
@@ -208,15 +106,16 @@ const Circle: React.FC<CircleProps> = ({
     hideLabel(i);
   };
 
+  /** Вращение круга */
   const rotateToIndex = (i: number, instant = false) => {
     const angleStep = 360 / dotCount;
-    const target = -(i * angleStep) - 60;
+    const target = -(i * angleStep) - 60; // минус чтобы крутилось по часовой стрелке
 
     gsap.killTweensOf(rotation.current);
     gsap.to(rotation.current, {
       angle: target,
-      duration: instant ? 0 : 1.5,
-      ease: instant ? "none" : "elastic.out(0.7, 0.9)",
+      duration: instant ? 0 : 1.2,
+      ease: instant ? "none" : "power4.out", // плавное вращение
       onUpdate: () => {
         const a = rotation.current.angle;
         if (circleRef.current)
@@ -228,30 +127,14 @@ const Circle: React.FC<CircleProps> = ({
     });
   };
 
-  const handleClick = (i: number) => {
-    if (activeDot !== null && activeDot !== i) {
-      setDotVisual(activeDot, 1, idleColor, 0.2);
-      hideLabel(activeDot);
-    }
-
-    setActiveDot(i);
-    setDotVisual(i, activeScale, activeColor, 0.28);
-    showLabel(i);
-
-    rotateToIndex(i);
-    setCategoryText(db.categories[activeDot].category);
-  };
-
   return (
     <>
       <div
-        ref={categoryTextRef}
         style={{
           position: "absolute",
           right: "500px",
           top: "120px",
           display: "inline-block",
-          overflow: "hidden",
           color: "#42567A",
           fontSize: "1.2rem",
           fontWeight: "600",
@@ -259,7 +142,7 @@ const Circle: React.FC<CircleProps> = ({
           height: "30px",
         }}
       >
-        <div>{categoryText}</div>
+        <div>{category}</div>
       </div>
       <div
         ref={circleRef}
@@ -272,7 +155,7 @@ const Circle: React.FC<CircleProps> = ({
           borderRadius: "50%",
           border: "1px solid #42567a2d",
           transformOrigin: "50% 50%",
-          zIndex: "150",
+          zIndex: 150,
         }}
       >
         {Array.from({ length: dotCount }).map((_, i) => {
@@ -286,7 +169,7 @@ const Circle: React.FC<CircleProps> = ({
               ref={(el) => (dotRefs.current[i] = el)}
               onMouseEnter={() => handleHoverIn(i)}
               onMouseLeave={() => handleHoverOut(i)}
-              onClick={() => handleClick(i)}
+              onClick={() => setActiveDot(i)}
               style={{
                 position: "absolute",
                 left: `${left}px`,

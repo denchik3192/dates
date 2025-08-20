@@ -1,18 +1,21 @@
-import { useRef, useState, useEffect } from 'react';
-import { gsap } from 'gsap';
-import { db } from '../db/db';
-import s from './dates.module.scss';
+import { useRef, useState, useEffect } from "react";
+import { gsap } from "gsap";
+import { db } from "../db/db";
+import s from "./dates.module.scss";
 
 interface IProps {
   activeDot: number;
 }
 
 const Dates = ({ activeDot }: IProps) => {
-  const [prevFirstDate, setPrevFirstDate] = useState<string>('');
-  const [prevLastDate, setPrevLastDate] = useState<string>('');
+  const [prevFirstDate, setPrevFirstDate] = useState<string>("");
+  const [prevLastDate, setPrevLastDate] = useState<string>("");
+  console.log(activeDot + " in dates");
 
   const currentDates = [
-    ...db.categories[activeDot].events.sort((a, b) => Number(a.date) - Number(b.date)),
+    ...db.categories[activeDot]?.events?.sort(
+      (a, b) => Number(a.date) - Number(b.date)
+    ),
   ];
   const firstDate = currentDates[0].date.toString();
   const lastDate = currentDates.slice(-1)[0].date.toString();
@@ -35,7 +38,11 @@ const Dates = ({ activeDot }: IProps) => {
     return values;
   };
 
-  const animateDigitScroll = (ref: HTMLDivElement, oldDigit: number, newDigit: number) => {
+  const animateDigitScroll = (
+    ref: HTMLDivElement,
+    oldDigit: number,
+    newDigit: number
+  ) => {
     if (oldDigit === newDigit) return;
 
     const timeline = gsap.timeline();
@@ -60,9 +67,13 @@ const Dates = ({ activeDot }: IProps) => {
     });
   };
 
-  const animateDigits = (refs: HTMLDivElement[], oldValue: string, newValue: string) => {
-    const oldDigits = oldValue.padStart(newValue.length, '0').split('');
-    const newDigits = newValue.padStart(newValue.length, '0').split('');
+  const animateDigits = (
+    refs: HTMLDivElement[],
+    oldValue: string,
+    newValue: string
+  ) => {
+    const oldDigits = oldValue.padStart(newValue.length, "0").split("");
+    const newDigits = newValue.padStart(newValue.length, "0").split("");
 
     refs.forEach((ref, index) => {
       const oldDigit = parseInt(oldDigits[index], 10);
@@ -86,32 +97,48 @@ const Dates = ({ activeDot }: IProps) => {
   return (
     <div className={s.dates}>
       {/* Первая дата */}
-      <div style={{ display: 'flex', fontSize: '200px', color: '#5D5FEF', fontWeight: '800' }}>
-        {firstDate.split('').map((digit, index) => (
+      <div
+        style={{
+          display: "flex",
+          fontSize: "200px",
+          color: "#5D5FEF",
+          fontWeight: "800",
+        }}
+      >
+        {firstDate.split("").map((digit, index) => (
           <div
             key={`first-${index}`}
             ref={createRefs(firstDateRefs.current)}
             style={{
-              display: 'inline-block',
-              width: '1ch',
-              textAlign: 'center',
-              position: 'relative',
-            }}>
+              display: "inline-block",
+              width: "1ch",
+              textAlign: "center",
+              position: "relative",
+            }}
+          >
             {digit}
           </div>
         ))}
       </div>
-      <div style={{ display: 'flex', fontSize: '200px', color: '#EF5DA8', fontWeight: '800' }}>
-        {lastDate.split('').map((digit, index) => (
+      <div
+        style={{
+          display: "flex",
+          fontSize: "200px",
+          color: "#EF5DA8",
+          fontWeight: "800",
+        }}
+      >
+        {lastDate.split("").map((digit, index) => (
           <div
             key={`last-${index}`}
             ref={createRefs(lastDateRefs.current)}
             style={{
-              display: 'inline-block',
-              width: '1ch',
-              textAlign: 'center',
-              position: 'relative',
-            }}>
+              display: "inline-block",
+              width: "1ch",
+              textAlign: "center",
+              position: "relative",
+            }}
+          >
             {digit}
           </div>
         ))}

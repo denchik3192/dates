@@ -1,8 +1,6 @@
-import s from './date-event.module.scss';
+import s from "./date-event.module.scss";
 
 function DateEvent({ event }: any) {
-  console.log('render dateEvent');
-
   return (
     <>
       <div className={s.event}>
