@@ -1,10 +1,10 @@
 // Intro.tsx
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import s from "./intro.module.scss"; // стили для интро
+import s from "./intro.module.scss";
 
 interface IntroProps {
-  onFinish: () => void; // коллбек после окончания интро
+  onFinish: () => void;
 }
 
 export default function Intro({ onFinish }: IntroProps) {

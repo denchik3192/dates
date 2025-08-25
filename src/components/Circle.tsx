@@ -34,11 +34,21 @@ const Circle: React.FC<CircleProps> = ({
   const rotation = useRef({ angle: 0 });
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
   const category = db.categories[activeDot as number].category;
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const playAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0;
+      audioRef.current
+        .play()
+        .catch((e) => console.warn("Audio playback failed:", e));
+    }
+  };
 
   useEffect(() => {
     if (circleRef.current) {
       gsap.set(circleRef.current, { transformOrigin: "50% 50%" });
     }
+    audioRef.current = new Audio("/click.wav");
   }, []);
 
   /** Следим за activeDot и крутим круг */
@@ -57,7 +67,6 @@ const Circle: React.FC<CircleProps> = ({
         }
       });
 
-      // подсвечиваем новый
       setDotVisual(activeDot, activeScale, activeColor, 0.28);
       showLabel(activeDot);
 
@@ -109,13 +118,13 @@ const Circle: React.FC<CircleProps> = ({
   /** Вращение круга */
   const rotateToIndex = (i: number, instant = false) => {
     const angleStep = 360 / dotCount;
-    const target = -(i * angleStep) - 60; // минус чтобы крутилось по часовой стрелке
+    const target = -(i * angleStep) - 60;
 
     gsap.killTweensOf(rotation.current);
     gsap.to(rotation.current, {
       angle: target,
       duration: instant ? 0 : 1.2,
-      ease: instant ? "none" : "power4.out", // плавное вращение
+      ease: instant ? "none" : "power4.out",
       onUpdate: () => {
         const a = rotation.current.angle;
         if (circleRef.current)
@@ -125,6 +134,7 @@ const Circle: React.FC<CircleProps> = ({
         });
       },
     });
+    playAudio();
   };
 
   return (
@@ -132,88 +142,102 @@ const Circle: React.FC<CircleProps> = ({
       <div
         style={{
           position: "absolute",
-          right: "500px",
-          top: "120px",
-          display: "inline-block",
-          color: "#42567A",
-          fontSize: "1.2rem",
-          fontWeight: "600",
-          textAlign: "center",
-          height: "30px",
-        }}
-      >
-        <div>{category}</div>
-      </div>
-      <div
-        ref={circleRef}
-        style={{
-          position: "absolute",
-          top: "145px",
-          left: "calc(50% - 264px)",
           width: radius * 2,
-          height: radius * 2,
-          borderRadius: "50%",
-          border: "1px solid #42567a2d",
-          transformOrigin: "50% 50%",
-          zIndex: 150,
+          height: radius * 2 + 50, // немного больше, чтобы влезла категория
+          left: "calc(50% - 264px)",
+          top: "90px",
         }}
       >
-        {Array.from({ length: dotCount }).map((_, i) => {
-          const angle = (i * 2 * Math.PI) / dotCount;
-          const left = radius + radius * Math.cos(angle) - dotSize / 2;
-          const top = radius + radius * Math.sin(angle) - dotSize / 2;
+        {/* Категория над кругом */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: `calc(100% - 40px)`, // 10px над кругом
+            left: "80%",
+            transform: "translateX(-50%)",
+            color: "#42567A",
+            fontSize: "1.2rem",
+            fontWeight: "600",
+            textAlign: "center",
+            height: "30px",
+          }}
+        >
+          <div>{category}</div>
+        </div>
 
-          return (
-            <div
-              key={i}
-              ref={(el) => (dotRefs.current[i] = el)}
-              onMouseEnter={() => handleHoverIn(i)}
-              onMouseLeave={() => handleHoverOut(i)}
-              onClick={() => setActiveDot(i)}
-              style={{
-                position: "absolute",
-                left: `${left}px`,
-                top: `${top}px`,
-                width: `${dotSize}px`,
-                height: `${dotSize}px`,
-                borderRadius: "50%",
-                background: idleColor,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                transform: "scale(1)",
-                userSelect: "none",
-              }}
-            >
-              <span
-                ref={(el) => (labelRotorRefs.current[i] = el)}
+        {/* Сам круг */}
+        <div
+          ref={circleRef}
+          style={{
+            position: "absolute",
+            top: "50px", // отступ от верхнего края контейнера
+            left: 0,
+            width: radius * 2,
+            height: radius * 2,
+            borderRadius: "50%",
+            border: "1px solid #42567a2d",
+            transformOrigin: "50% 50%",
+            zIndex: 150,
+          }}
+        >
+          {/* Точки */}
+          {Array.from({ length: dotCount }).map((_, i) => {
+            const angle = (i * 2 * Math.PI) / dotCount;
+            const left = radius + radius * Math.cos(angle) - dotSize / 2;
+            const top = radius + radius * Math.sin(angle) - dotSize / 2;
+
+            return (
+              <div
+                key={i}
+                ref={(el) => (dotRefs.current[i] = el)}
+                onMouseEnter={() => handleHoverIn(i)}
+                onMouseLeave={() => handleHoverOut(i)}
+                onClick={() => setActiveDot(i)}
                 style={{
-                  display: "inline-block",
-                  transformOrigin: "50% 50%",
-                  pointerEvents: "none",
+                  position: "absolute",
+                  left: `${left}px`,
+                  top: `${top}px`,
+                  width: `${dotSize}px`,
+                  height: `${dotSize}px`,
+                  borderRadius: "50%",
+                  background: idleColor,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  transform: "scale(1)",
+                  userSelect: "none",
                 }}
               >
                 <span
-                  ref={(el) => (labelInnerRefs.current[i] = el)}
+                  ref={(el) => (labelRotorRefs.current[i] = el)}
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: Math.round(dotSize * 0.55),
-                    fontWeight: 700,
-                    lineHeight: 1,
-                    opacity: 0,
+                    display: "inline-block",
+                    transformOrigin: "50% 50%",
                     pointerEvents: "none",
-                    color: "#000",
                   }}
                 >
-                  {i + 1}
+                  <span
+                    ref={(el) => (labelInnerRefs.current[i] = el)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: Math.round(dotSize * 0.55),
+                      fontWeight: 700,
+                      lineHeight: 1,
+                      opacity: 0,
+                      pointerEvents: "none",
+                      color: "#000",
+                    }}
+                  >
+                    {i + 1}
+                  </span>
                 </span>
-              </span>
-            </div>
-          );
-        })}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </>
   );
