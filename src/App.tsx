@@ -16,7 +16,7 @@ import type { Swiper as SwiperClass } from "swiper";
 import Intro from "./components/Intro";
 
 function App() {
-  const [activeDot, setActiveDot] = useState<number>(0); // начнём с 0
+  const [activeDot, setActiveDot] = useState<number>(0);
   const [showIntro, setShowIntro] = useState(true);
   const swiperRef = useRef<SwiperClass | null>(null);
 

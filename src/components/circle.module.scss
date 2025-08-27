@@ -1,63 +1,72 @@
 .circle {
   position: absolute;
-  margin: auto;
-  top: 145px;
-  left: calc(50% - 264px);
+  top: 50px;
+  left: 0;
   width: 530px;
   height: 530px;
   border-radius: 50%;
   border: 1px solid #42567a2d;
-  transition: 0.7s ease-in;
-  z-index: 100;
-  @media (max-width: 420px) {
+  transform-origin: 50% 50%;
+  z-index: 150;
+
+  @media (max-width: 768px) {
     display: none;
   }
 }
 
-.dot {
-  position: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0;
-  background-color: #42567a;
-  border-radius: 50%;
-  transition: 0.3s ease-in;
+// .dot {
+//   position: fixed;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   font-size: 0;
+//   background-color: #42567a;
+//   border-radius: 50%;
+//   transition: 0.3s ease-in;
 
-  &.active {
-    position: fixed;
-    bottom: 40px;
-    right: 40px;
-    font-size: 5px;
-    border: 1px solid #42567a52;
-    transform: scale(5);
-    background-color: #ccc;
-    width: 56px;
-    height: 56px;
-  }
+//   &.active {
+//     position: fixed;
+//     bottom: 40px;
+//     right: 40px;
+//     font-size: 5px;
+//     border: 1px solid #42567a52;
+//     transform: scale(5);
+//     background-color: #ccc;
+//     width: 56px;
+//     height: 56px;
+//   }
 
-  &:hover {
-    position: absolute;
-    transform: scale(5);
-    background-color: #ccc;
-    border: 1px solid #42567a2d;
-    width: 56px;
-    height: 56px;
-    font-size: 5px;
-    transition: 0.2s ease-in-out;
-    cursor: pointer;
-  }
-}
+//   &:hover {
+//     position: absolute;
+//     transform: scale(5);
+//     background-color: #ccc;
+//     border: 1px solid #42567a2d;
+//     width: 56px;
+//     height: 56px;
+//     font-size: 5px;
+//     transition: 0.2s ease-in-out;
+//     cursor: pointer;
+//   }
+// }
 
-.category {
+.categoryBox {
   position: absolute;
-  right: 500px;
-  top: 130px;
-  display: inline-block;
-  overflow: hidden;
-  color: #42567a;
-  font-size: 1.2rem;
-  font-weight: 600;
-  text-align: center;
-  height: 30px;
+  width: 530px;
+  height: 530px + 50; // немного больше, чтобы влезла категория
+  left: calc(50% - 264px);
+  top: 94px;
+  .category {
+    position: absolute;
+    bottom: calc(100% - 40px);
+    left: 80%;
+    transform: translateX(-50%);
+    color: #42567a;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-align: center;
+    height: 30px;
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
 }

@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { gsap } from "gsap";
 import { db } from "../db/db";
+import s from "./circle.module.scss";
 
 interface CircleProps {
   dotCount?: number;
@@ -140,47 +141,22 @@ const Circle: React.FC<CircleProps> = ({
   return (
     <>
       <div
-        style={{
-          position: "absolute",
-          width: radius * 2,
-          height: radius * 2 + 50, // немного больше, чтобы влезла категория
-          left: "calc(50% - 264px)",
-          top: "90px",
-        }}
+        className={s.categoryBox}
+        // style={{
+        //   position: "absolute",
+        //   width: radius * 2,
+        //   height: radius * 2 + 50, // немного больше, чтобы влезла категория
+        //   left: "calc(50% - 264px)",
+        //   top: "90px",
+        // }}
       >
         {/* Категория над кругом */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: `calc(100% - 40px)`, // 10px над кругом
-            left: "80%",
-            transform: "translateX(-50%)",
-            color: "#42567A",
-            fontSize: "1.2rem",
-            fontWeight: "600",
-            textAlign: "center",
-            height: "30px",
-          }}
-        >
+        <div className={s.category}>
           <div>{category}</div>
         </div>
 
-        {/* Сам круг */}
-        <div
-          ref={circleRef}
-          style={{
-            position: "absolute",
-            top: "50px", // отступ от верхнего края контейнера
-            left: 0,
-            width: radius * 2,
-            height: radius * 2,
-            borderRadius: "50%",
-            border: "1px solid #42567a2d",
-            transformOrigin: "50% 50%",
-            zIndex: 150,
-          }}
-        >
-          {/* Точки */}
+        <div ref={circleRef} className={s.circle}>
+          {/* dots */}
           {Array.from({ length: dotCount }).map((_, i) => {
             const angle = (i * 2 * Math.PI) / dotCount;
             const left = radius + radius * Math.cos(angle) - dotSize / 2;

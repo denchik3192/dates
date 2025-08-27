@@ -6,6 +6,7 @@
   padding-left: 70px;
   font-weight: 700;
   font-size: 56px;
+
   color: #42567a;
   line-height: 120%;
 
@@ -17,9 +18,13 @@
     width: 5px;
     height: 8rem;
     background: linear-gradient(#3877ee, #ef5da8);
+    @media (max-width: 780px) {
+      display: none;
+    }
   }
-  @media (max-width: 480px) {
-    font-size: 56px;
+  @media (max-width: 780px) {
+    font-size: clamp(1.3rem, 2vw, 56px);
+    font-size: 1.4rem;
     padding-left: 20px;
   }
 }
