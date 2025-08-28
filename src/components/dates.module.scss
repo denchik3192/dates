@@ -42,7 +42,7 @@
   @media (max-width: 780px) {
     // flex-direction: column;
     gap: 20px;
-    font-size: 4rem; // уменьшаем размер цифр
+    font-size: 56px; // уменьшаем размер цифр
 
     .date {
       flex-direction: row;
@@ -51,7 +51,7 @@
   }
 
   @media (max-width: 320px) {
-    font-size: 3rem; // для самых маленьких экранов
+    font-size: 56px; // для самых маленьких экранов
     gap: 10px;
 
     .date {

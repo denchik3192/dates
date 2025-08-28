@@ -1,4 +1,5 @@
-import "./App.css";
+import "./App.scss";
+import s from "./navButtons.module.scss";
 import Title from "./components/Title";
 import Dates from "./components/Dates";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -45,7 +46,11 @@ function App() {
           <Circle activeDot={activeDot} setActiveDot={handleSetActiveDot} />
 
           {/* кастомные кнопки prev/next */}
-          <div style={{ display: "flex" }}>
+          {/* <div style={{ display: "flex" }}>
+            <div className="custom-prev-main"></div>
+            <div className="custom-next-main"></div>
+          </div> */}
+          <div className={s.navButtons} style={{ display: "flex" }}>
             <div className="custom-prev-main"></div>
             <div className="custom-next-main"></div>
           </div>
@@ -75,6 +80,7 @@ function App() {
             {db.categories.map((el, index) => (
               <SwiperSlide key={index}>
                 <div
+                  // className={s.slideBox}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -87,6 +93,25 @@ function App() {
                     modules={[Navigation, Pagination]}
                     spaceBetween={50}
                     slidesPerView={3}
+                    breakpoints={{
+                      0: {
+                        slidesPerView: 2,
+                        spaceBetween: 10,
+                      },
+                      480: {
+                        slidesPerView: 2,
+                      },
+                      780: {
+                        slidesPerView: 2,
+                      },
+                      781: {
+                        slidesPerView: 3,
+                      },
+                    }}
+                    pagination={{
+                      el: ".swiper-pagination-small",
+                      clickable: true,
+                    }}
                     navigation={{
                       nextEl: ".custom-next",
                       prevEl: ".custom-prev",
@@ -104,6 +129,7 @@ function App() {
               </SwiperSlide>
             ))}
           </Swiper>
+          <div className="swiper-pagination-small"></div>
         </Container>
       )}
     </>
