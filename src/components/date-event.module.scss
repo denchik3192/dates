@@ -12,13 +12,14 @@
   .descr {
     color: rgb(66, 86, 122);
     font-size: 20px;
-    // margin: 0;
+    margin-top: 10px;
   }
 
   @media (max-width: 780px) {
     .year {
       font-size: 16px;
       margin-bottom: 6px;
+      margin-top: 6px;
     }
     .descr {
       font-size: 14px;
