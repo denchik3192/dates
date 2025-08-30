@@ -1,11 +1,11 @@
 .centralContainer {
   max-width: 1440px;
   height: 100vh;
-  // margin: 0 auto 0 300px;
   margin: 0 auto;
   border-left: 1px solid rgba(128, 128, 128, 0.5);
   border-right: 1px solid rgba(128, 128, 128, 0.5);
   position: relative;
+  overflow: hidden;
 
   @media (max-width: 768px) {
     margin: 0 auto;
@@ -28,7 +28,7 @@
   height: 100%;
   left: 50%;
   transform: translateX(-50%);
-  @media (max-width: 780px) {
+  @media (max-width: 768px) {
     display: none;
   }
 }
@@ -39,7 +39,8 @@
   top: 410px;
   transform: translateY(-50%);
   border-bottom: 1px solid rgba(128, 128, 128, 0.5);
-  @media (max-width: 780px) {
+  @media (max-width: 768px) {
     top: 292px;
+    width: calc(100% - 40px);
   }
 }

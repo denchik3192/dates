@@ -52,10 +52,8 @@ const Circle: React.FC<CircleProps> = ({
     audioRef.current = new Audio("/click.wav");
   }, []);
 
-  /** Следим за activeDot и крутим круг */
   useEffect(() => {
     if (activeDot !== null) {
-      // сбрасываем прошлый активный
       dotRefs.current.forEach((dot, i) => {
         if (i !== activeDot && dot) {
           gsap.to(dot, {
@@ -70,8 +68,6 @@ const Circle: React.FC<CircleProps> = ({
 
       setDotVisual(activeDot, activeScale, activeColor, 0.28);
       showLabel(activeDot);
-
-      // вращаем к нему
       rotateToIndex(activeDot);
     }
   }, [activeDot]);
@@ -116,7 +112,6 @@ const Circle: React.FC<CircleProps> = ({
     hideLabel(i);
   };
 
-  /** Вращение круга */
   const rotateToIndex = (i: number, instant = false) => {
     const angleStep = 360 / dotCount;
     const target = -(i * angleStep) - 60;
@@ -140,23 +135,12 @@ const Circle: React.FC<CircleProps> = ({
 
   return (
     <>
-      <div
-        className={s.categoryBox}
-        // style={{
-        //   position: "absolute",
-        //   width: radius * 2,
-        //   height: radius * 2 + 50, // немного больше, чтобы влезла категория
-        //   left: "calc(50% - 264px)",
-        //   top: "90px",
-        // }}
-      >
-        {/* Категория над кругом */}
+      <div className={s.categoryBox}>
         <div className={s.category}>
           <div>{category}</div>
         </div>
 
         <div ref={circleRef} className={s.circle}>
-          {/* dots */}
           {Array.from({ length: dotCount }).map((_, i) => {
             const angle = (i * 2 * Math.PI) / dotCount;
             const left = radius + radius * Math.cos(angle) - dotSize / 2;

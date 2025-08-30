@@ -32,7 +32,7 @@ export const db = {
       category: "Наука",
       events: [
         {
-          date: "1998",
+          date: "1997",
           description: "Открытие ускоренного расширения Вселенной.",
         },
         {

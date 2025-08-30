@@ -4,7 +4,7 @@
 }
 
 .swiper {
-  @media (max-width: 780px) {
+  @media (max-width: 768px) {
     margin: 0 !important;
   }
 }
@@ -27,14 +27,14 @@
 }
 .custom-prev-main {
   margin-left: 50px !important;
-  @media (max-width: 780px) {
+  @media (max-width: 768px) {
     margin-left: 0 !important;
   }
 }
 
 .custom-next,
 .custom-prev {
-  @media (max-width: 780px) {
+  @media (max-width: 768px) {
     display: none;
   }
 }
@@ -54,7 +54,7 @@
   border: 1px solid #42567a84;
   background-repeat: no-repeat;
   background-position: center;
-  @media (max-width: 780px) {
+  @media (max-width: 768px) {
     min-width: 30px;
     min-height: 30px;
   }
@@ -64,7 +64,7 @@
 .custom-prev-main {
   margin-right: 20px;
   background-image: url("./../public/prev-slider.svg");
-  @media (max-width: 780px) {
+  @media (max-width: 768px) {
     margin-right: 0;
     bottom: 10px !important;
   }
@@ -83,7 +83,7 @@
   left: 50px !important;
   z-index: -1100 !important;
   color: #42567a !important;
-  @media (max-width: 780px) {
+  @media (max-width: 768px) {
     top: 500px !important;
     left: 20px !important;
     width: 90%;
@@ -93,25 +93,23 @@
 
 .swiper-slide {
   .swiper-slide-active {
-    @media (max-width: 780px) {
+    @media (max-width: 768px) {
       width: 60% !important;
-    }
-  }
-  .swiper-slide-next {
-    @media (max-width: 780px) {
-      opacity: 0.5;
     }
   }
 }
 
 .swiper-pagination-small {
   display: none;
-  @media (max-width: 780px) {
+  @media (max-width: 768px) {
     position: absolute !important;
-
-    top: 528px !important;
+    margin: 0 auto !important;
+    width: 20% !important;
+    height: 20% !important;
+    top: 532px !important;
+    left: 40% !important;
     display: block;
     text-align: center;
-    z-index: -2;
+    z-index: 2;
   }
 }

@@ -21,7 +21,6 @@ function App() {
   const [showIntro, setShowIntro] = useState(true);
   const swiperRef = useRef<SwiperClass | null>(null);
 
-  // обработчик переключения точки + синхронизация слайдера
   const handleSetActiveDot = (index: number) => {
     setActiveDot(index);
     swiperRef.current?.slideTo(index);
@@ -38,18 +37,8 @@ function App() {
         <Container>
           <Title />
           <Dates activeDot={activeDot} />
-
-          {/* кастомная пагинация */}
           <div className="swiper-pagination"></div>
-
-          {/* круг с точками */}
           <Circle activeDot={activeDot} setActiveDot={handleSetActiveDot} />
-
-          {/* кастомные кнопки prev/next */}
-          {/* <div style={{ display: "flex" }}>
-            <div className="custom-prev-main"></div>
-            <div className="custom-next-main"></div>
-          </div> */}
           <div className={s.navButtons} style={{ display: "flex" }}>
             <div className="custom-prev-main"></div>
             <div className="custom-next-main"></div>
@@ -71,16 +60,15 @@ function App() {
               nextEl: ".custom-next-main",
               prevEl: ".custom-prev-main",
             }}
-            scrollbar={{ draggable: true }}
             onSwiper={(swiper: SwiperClass) => (swiperRef.current = swiper)}
             onSlideChange={(swiper: SwiperClass) =>
               handleSetActiveDot(swiper.activeIndex)
             }
+            allowTouchMove={false}
           >
             {db.categories.map((el, index) => (
               <SwiperSlide key={index}>
                 <div
-                  // className={s.slideBox}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -96,12 +84,11 @@ function App() {
                     breakpoints={{
                       0: {
                         slidesPerView: 2,
-                        spaceBetween: 10,
                       },
                       480: {
                         slidesPerView: 2,
                       },
-                      780: {
+                      768: {
                         slidesPerView: 2,
                       },
                       781: {

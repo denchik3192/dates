@@ -1,4 +1,3 @@
-// Intro.tsx
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import s from "./intro.module.scss";

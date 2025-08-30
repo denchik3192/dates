@@ -10,7 +10,6 @@ interface IProps {
 const Dates = ({ activeDot }: IProps) => {
   const [prevFirstDate, setPrevFirstDate] = useState<string>("");
   const [prevLastDate, setPrevLastDate] = useState<string>("");
-  console.log(activeDot + " in dates");
 
   const currentDates = [
     ...db.categories[activeDot]?.events?.sort(
@@ -99,7 +98,6 @@ const Dates = ({ activeDot }: IProps) => {
       <div
         style={{
           display: "flex",
-          // fontSize: "200px",
           color: "#5D5FEF",
           fontWeight: "800",
         }}

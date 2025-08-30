@@ -9,8 +9,8 @@ function Title() {
     if (titleRef.current) {
       gsap.fromTo(
         titleRef.current,
-        { opacity: 0, y: 30 }, // начальное состояние: прозрачный и чуть ниже
-        { opacity: 1, y: 0, duration: 1.5, ease: "power2.out" } // финальное состояние
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 1.5, ease: "power2.out" }
       );
     }
   }, []);

@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
 .event {
   background: #ebebeb;
+  overflow: hidden;
   .year {
     font-family: "Bebas Neue", sans-serif;
     font-weight: 400;
@@ -13,9 +14,10 @@
     color: rgb(66, 86, 122);
     font-size: 20px;
     margin-top: 10px;
+    height: 100px;
   }
 
-  @media (max-width: 780px) {
+  @media (max-width: 768px) {
     .year {
       font-size: 16px;
       margin-bottom: 6px;
