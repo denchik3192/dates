@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import s from "./intro.module.scss";
 
@@ -27,7 +27,7 @@ export default function Intro({ onFinish }: IntroProps) {
       delay: 0.2,
       ease: "power2.in",
     });
-  }, []);
+  }, [onFinish]);
 
   return (
     <div ref={containerRef} className={s.introContainer}>

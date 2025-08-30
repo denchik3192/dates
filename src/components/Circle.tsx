@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import { gsap } from "gsap";
 import { db } from "../db/db";
 import s from "./circle.module.scss";
@@ -33,7 +33,7 @@ const Circle: React.FC<CircleProps> = ({
   const labelInnerRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const labelRotorRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const rotation = useRef({ angle: 0 });
-  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+  const [, setHoverIndex] = useState<number | null>(null);
   const category = db.categories[activeDot as number].category;
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const playAudio = () => {
@@ -44,7 +44,29 @@ const Circle: React.FC<CircleProps> = ({
         .catch((e) => console.warn("Audio playback failed:", e));
     }
   };
+  const rotateToIndex = useCallback(
+    (i: number, instant = false) => {
+      const angleStep = 360 / dotCount;
+      const target = -(i * angleStep) - 60;
 
+      gsap.killTweensOf(rotation.current);
+      gsap.to(rotation.current, {
+        angle: target,
+        duration: instant ? 0 : 1.2,
+        ease: instant ? "none" : "power4.out",
+        onUpdate: () => {
+          const a = rotation.current.angle;
+          if (circleRef.current)
+            circleRef.current.style.transform = `rotate(${a}deg)`;
+          labelRotorRefs.current.forEach((r) => {
+            if (r) r.style.transform = `rotate(${-a}deg)`;
+          });
+        },
+      });
+      playAudio();
+    },
+    [dotCount]
+  );
   useEffect(() => {
     if (circleRef.current) {
       gsap.set(circleRef.current, { transformOrigin: "50% 50%" });
@@ -70,7 +92,7 @@ const Circle: React.FC<CircleProps> = ({
       showLabel(activeDot);
       rotateToIndex(activeDot);
     }
-  }, [activeDot]);
+  }, [activeColor, activeDot, activeScale, idleColor, rotateToIndex]);
 
   const setDotVisual = (i: number, scale: number, color: string, dur = 0.2) => {
     const el = dotRefs.current[i];
@@ -110,27 +132,6 @@ const Circle: React.FC<CircleProps> = ({
     if (activeDot === i) return;
     setDotVisual(i, 1, idleColor, 0.2);
     hideLabel(i);
-  };
-
-  const rotateToIndex = (i: number, instant = false) => {
-    const angleStep = 360 / dotCount;
-    const target = -(i * angleStep) - 60;
-
-    gsap.killTweensOf(rotation.current);
-    gsap.to(rotation.current, {
-      angle: target,
-      duration: instant ? 0 : 1.2,
-      ease: instant ? "none" : "power4.out",
-      onUpdate: () => {
-        const a = rotation.current.angle;
-        if (circleRef.current)
-          circleRef.current.style.transform = `rotate(${a}deg)`;
-        labelRotorRefs.current.forEach((r) => {
-          if (r) r.style.transform = `rotate(${-a}deg)`;
-        });
-      },
-    });
-    playAudio();
   };
 
   return (

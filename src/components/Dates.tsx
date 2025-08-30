@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { gsap } from "gsap";
 import { db } from "../db/db";
 import s from "./dates.module.scss";
@@ -26,60 +26,58 @@ const Dates = ({ activeDot }: IProps) => {
     if (el && !array.includes(el)) array.push(el);
   };
 
-  const generateIntermediateValues = (start: number, end: number) => {
-    const values = [];
-    let current = start;
-    while (current !== end) {
-      values.push(current);
-      current += start < end ? 1 : -1;
-    }
-    values.push(end);
-    return values;
-  };
+  const animateDigitScroll = useCallback(
+    (ref: HTMLDivElement, oldDigit: number, newDigit: number) => {
+      if (oldDigit === newDigit) return;
 
-  const animateDigitScroll = (
-    ref: HTMLDivElement,
-    oldDigit: number,
-    newDigit: number
-  ) => {
-    if (oldDigit === newDigit) return;
+      const generateIntermediateValues = (start: number, end: number) => {
+        const values = [];
+        let current = start;
+        while (current !== end) {
+          values.push(current);
+          current += start < end ? 1 : -1;
+        }
+        values.push(end);
+        return values;
+      };
 
-    const timeline = gsap.timeline();
-    const intermediateValues = generateIntermediateValues(oldDigit, newDigit);
+      const timeline = gsap.timeline();
+      const intermediateValues = generateIntermediateValues(oldDigit, newDigit);
 
-    intermediateValues.forEach((value, index) => {
-      timeline.to(ref, {
-        y: 30,
-        opacity: 0.4,
-        duration: 0.15,
-        onComplete: () => {
-          ref.textContent = value.toString();
-          ref.style.transform = `translateY(${index * 30}px)`;
-        },
+      intermediateValues.forEach((value, index) => {
+        timeline.to(ref, {
+          y: 30,
+          opacity: 0.4,
+          duration: 0.15,
+          onComplete: () => {
+            ref.textContent = value.toString();
+            ref.style.transform = `translateY(${index * 30}px)`;
+          },
+        });
       });
-    });
 
-    timeline.to(ref, {
-      y: 0,
-      opacity: 1,
-      duration: 0.1,
-    });
-  };
+      timeline.to(ref, {
+        y: 0,
+        opacity: 1,
+        duration: 0.1,
+      });
+    },
+    []
+  );
 
-  const animateDigits = (
-    refs: HTMLDivElement[],
-    oldValue: string,
-    newValue: string
-  ) => {
-    const oldDigits = oldValue.padStart(newValue.length, "0").split("");
-    const newDigits = newValue.padStart(newValue.length, "0").split("");
+  const animateDigits = useCallback(
+    (refs: HTMLDivElement[], oldValue: string, newValue: string) => {
+      const oldDigits = oldValue.padStart(newValue.length, "0").split("");
+      const newDigits = newValue.padStart(newValue.length, "0").split("");
 
-    refs.forEach((ref, index) => {
-      const oldDigit = parseInt(oldDigits[index], 10);
-      const newDigit = parseInt(newDigits[index], 10);
-      animateDigitScroll(ref, oldDigit, newDigit);
-    });
-  };
+      refs.forEach((ref, index) => {
+        const oldDigit = parseInt(oldDigits[index], 10);
+        const newDigit = parseInt(newDigits[index], 10);
+        animateDigitScroll(ref, oldDigit, newDigit);
+      });
+    },
+    [animateDigitScroll]
+  );
 
   useEffect(() => {
     if (prevFirstDate !== firstDate) {
@@ -91,7 +89,7 @@ const Dates = ({ activeDot }: IProps) => {
       animateDigits(lastDateRefs.current, prevLastDate, lastDate);
       setPrevLastDate(lastDate);
     }
-  }, [firstDate, lastDate, prevFirstDate, prevLastDate]);
+  }, [animateDigits, firstDate, lastDate, prevFirstDate, prevLastDate]);
 
   return (
     <div className={s.dates}>
